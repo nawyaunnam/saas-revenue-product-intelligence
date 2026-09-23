@@ -1,0 +1,29 @@
+services:
+  pipeline:
+    build: .
+    volumes:
+      - pipeline-data:/opt/project/data
+      - pipeline-artifacts:/opt/project/artifacts
+  preview:
+    image: python:3.12-slim
+    command: [python, -m, http.server, '8081', --directory, /artifacts]
+    ports: ['127.0.0.1:8081:8081']
+    volumes: [pipeline-artifacts:/artifacts:ro]
+    depends_on:
+      pipeline: {condition: service_completed_successfully}
+  airflow:
+    profiles: [airflow]
+    build: {context: ., dockerfile: Dockerfile.airflow}
+    environment:
+      AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
+      AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
+      SAAS_TARGET: local
+    ports: ['127.0.0.1:8080:8080']
+    volumes:
+      - airflow-data:/opt/project/data
+      - airflow-artifacts:/opt/project/artifacts
+volumes:
+  pipeline-data:
+  pipeline-artifacts:
+  airflow-data:
+  airflow-artifacts:

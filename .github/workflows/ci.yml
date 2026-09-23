@@ -1,0 +1,50 @@
+name: CI
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  analytics:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12', cache: pip}
+      - run: pip install -e '.[dev]'
+      - run: ruff check src tests dags scripts
+      - run: pytest -q
+      - run: saas demo
+      - name: dbt catalog and lineage
+        run: DUCKDB_PATH="$PWD/data/warehouse.duckdb" dbt docs generate --project-dir dbt --profiles-dir dbt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: analytics-evidence
+          path: |
+            artifacts/
+            dbt/target/manifest.json
+            dbt/target/run_results.json
+            dbt/target/catalog.json
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker compose config --quiet
+      - run: docker build -t saas-pipeline:ci .
+      - run: docker run --rm saas-pipeline:ci
+  airflow:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -f Dockerfile.airflow -t saas-airflow:ci .
+      - name: Parse DAG in actual Airflow runtime
+        run: >-
+          docker run --rm --entrypoint /usr/local/bin/python saas-airflow:ci -c
+          "from airflow.models import DagBag; b=DagBag('/opt/airflow/dags', include_examples=False); assert not b.import_errors, b.import_errors; d=b.get_dag('saas_revenue_product_intelligence'); assert len(d.tasks)==4; assert d.max_active_runs==1"
+
+  powerbi-model:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with: {dotnet-version: '8.0.x'}
+      - name: Validate semantic model with Microsoft TOM
+        run: dotnet run --project tests/model_validation -- powerbi/SaaSIntelligence.SemanticModel/model.bim

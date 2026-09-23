@@ -1,0 +1,19 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/bookmark/1.3.0/schema.json",
+  "name": "Product",
+  "displayName": "Product",
+  "explorationState": {
+    "version": "1.0",
+    "activeSection": "product",
+    "sections": {
+      "product": {
+        "visualContainers": {}
+      }
+    }
+  },
+  "options": {
+    "targetVisualNames": [],
+    "suppressData": true,
+    "suppressDisplay": true
+  }
+}

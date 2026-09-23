@@ -1,0 +1,59 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.4.0/schema.json",
+  "name": "metric_selector",
+  "position": {
+    "x": 850,
+    "y": 710,
+    "z": 0,
+    "height": 170,
+    "width": 400,
+    "tabOrder": 0
+  },
+  "visual": {
+    "visualType": "slicer",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Metric selector"
+                    }
+                  },
+                  "Property": "Metric"
+                }
+              },
+              "queryRef": "0Values",
+              "nativeQueryRef": "Metric"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Trend metric'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,925 @@
+{
+  "name": "SaaSIntelligence",
+  "compatibilityLevel": 1601,
+  "model": {
+    "culture": "en-US",
+    "defaultPowerBIDataSourceVersion": "powerBI_V3",
+    "discourageImplicitMeasures": true,
+    "sourceQueryCulture": "en-US",
+    "tables": [
+      {
+        "name": "Account",
+        "lineageTag": "7c37cc18-be3a-5449-874e-06e1eeb3b344",
+        "columns": [
+          {
+            "name": "account_id",
+            "dataType": "string",
+            "sourceColumn": "account_id",
+            "summarizeBy": "none",
+            "lineageTag": "cd810f80-d78f-5b2e-bc21-157e68b0ff40",
+            "isHidden": true
+          },
+          {
+            "name": "signup_date",
+            "dataType": "dateTime",
+            "sourceColumn": "signup_date",
+            "summarizeBy": "none",
+            "lineageTag": "31dba84a-a60d-54c6-a1aa-00df8312fd28",
+            "formatString": "yyyy-MM-dd"
+          },
+          {
+            "name": "segment",
+            "dataType": "string",
+            "sourceColumn": "segment",
+            "summarizeBy": "none",
+            "lineageTag": "6cc43be2-94cc-5c4f-84ef-0979bfaa9179"
+          },
+          {
+            "name": "region",
+            "dataType": "string",
+            "sourceColumn": "region",
+            "summarizeBy": "none",
+            "lineageTag": "f0059144-5372-547e-8d74-cf7ca4a22312"
+          },
+          {
+            "name": "channel",
+            "dataType": "string",
+            "sourceColumn": "channel",
+            "summarizeBy": "none",
+            "lineageTag": "cc2fd269-7ba9-5103-b1c4-19725a2923c1"
+          },
+          {
+            "name": "cohort_month",
+            "dataType": "dateTime",
+            "sourceColumn": "cohort_month",
+            "summarizeBy": "none",
+            "lineageTag": "e0383174-30b5-536b-9551-054ff72dcd7f",
+            "formatString": "yyyy-MM-dd"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Account",
+            "mode": "import",
+            "source": {
+              "type": "m",
+              "expression": "let\n Source = LoadMart(\"dim_account\"),\n EmptyAsNull = Table.ReplaceValue(Source, \"\", null, Replacer.ReplaceValue, Table.ColumnNames(Source)),\n Typed = Table.TransformColumnTypes(EmptyAsNull, {{\"account_id\", type text}, {\"signup_date\", type date}, {\"segment\", type text}, {\"region\", type text}, {\"channel\", type text}, {\"cohort_month\", type date}}, \"en-US\")\nin Typed"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Date",
+        "lineageTag": "c6e49bb8-fc68-51d9-85e2-ab47a96668eb",
+        "columns": [
+          {
+            "name": "date_day",
+            "dataType": "dateTime",
+            "sourceColumn": "date_day",
+            "summarizeBy": "none",
+            "lineageTag": "4bfabd76-00cd-5dc2-b988-88f55bdff1ee",
+            "formatString": "yyyy-MM-dd",
+            "isKey": true
+          },
+          {
+            "name": "month",
+            "dataType": "dateTime",
+            "sourceColumn": "month",
+            "summarizeBy": "none",
+            "lineageTag": "c7446c53-91a9-542f-8721-c4cc6082d224",
+            "formatString": "yyyy-MM-dd"
+          },
+          {
+            "name": "year",
+            "dataType": "int64",
+            "sourceColumn": "year",
+            "summarizeBy": "none",
+            "lineageTag": "8ecdde28-2479-5ebc-afb4-840ba0a22b18"
+          },
+          {
+            "name": "month_number",
+            "dataType": "int64",
+            "sourceColumn": "month_number",
+            "summarizeBy": "none",
+            "lineageTag": "31b5e792-5e8c-5426-adc3-fb8f9bb9a79c"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Date",
+            "mode": "import",
+            "source": {
+              "type": "m",
+              "expression": "let\n Source = LoadMart(\"dim_date\"),\n EmptyAsNull = Table.ReplaceValue(Source, \"\", null, Replacer.ReplaceValue, Table.ColumnNames(Source)),\n Typed = Table.TransformColumnTypes(EmptyAsNull, {{\"date_day\", type date}, {\"month\", type date}, {\"year\", Int64.Type}, {\"month_number\", Int64.Type}}, \"en-US\")\nin Typed"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Revenue",
+        "lineageTag": "d776f4d6-8f3f-546d-bcc3-4c748fcab550",
+        "columns": [
+          {
+            "name": "account_id",
+            "dataType": "string",
+            "sourceColumn": "account_id",
+            "summarizeBy": "none",
+            "lineageTag": "eb5e2c36-674c-54b6-8399-1967a8536107",
+            "isHidden": true
+          },
+          {
+            "name": "month",
+            "dataType": "dateTime",
+            "sourceColumn": "month",
+            "summarizeBy": "none",
+            "lineageTag": "9c7bc5f9-6430-5ef8-a242-2bcdf62b4ea7",
+            "formatString": "yyyy-MM-dd"
+          },
+          {
+            "name": "mrr",
+            "dataType": "decimal",
+            "sourceColumn": "mrr",
+            "summarizeBy": "none",
+            "lineageTag": "516506be-b058-5ea2-803c-07a92e5714ca"
+          },
+          {
+            "name": "beginning_mrr",
+            "dataType": "decimal",
+            "sourceColumn": "beginning_mrr",
+            "summarizeBy": "none",
+            "lineageTag": "d8d6d6fd-b862-5e31-b5ba-4036d021a43b"
+          },
+          {
+            "name": "new_mrr",
+            "dataType": "decimal",
+            "sourceColumn": "new_mrr",
+            "summarizeBy": "none",
+            "lineageTag": "f32ce2a7-89dd-500b-a47e-c750bc0cb75e"
+          },
+          {
+            "name": "reactivation_mrr",
+            "dataType": "decimal",
+            "sourceColumn": "reactivation_mrr",
+            "summarizeBy": "none",
+            "lineageTag": "224f5b40-6470-5bd7-ae8a-2f8e6625c661"
+          },
+          {
+            "name": "expansion_mrr",
+            "dataType": "decimal",
+            "sourceColumn": "expansion_mrr",
+            "summarizeBy": "none",
+            "lineageTag": "bc68e64a-0938-57c6-abc9-626093c6c099"
+          },
+          {
+            "name": "contraction_mrr",
+            "dataType": "decimal",
+            "sourceColumn": "contraction_mrr",
+            "summarizeBy": "none",
+            "lineageTag": "c306e7e8-7f75-5365-9c26-013d7068e11a"
+          },
+          {
+            "name": "churn_mrr",
+            "dataType": "decimal",
+            "sourceColumn": "churn_mrr",
+            "summarizeBy": "none",
+            "lineageTag": "1c287d12-0635-5642-a3a3-4309c2ff8777"
+          },
+          {
+            "name": "paying_account",
+            "dataType": "int64",
+            "sourceColumn": "paying_account",
+            "summarizeBy": "none",
+            "lineageTag": "242464a7-2894-5ea9-b18c-b34e219e3167"
+          },
+          {
+            "name": "beginning_account",
+            "dataType": "int64",
+            "sourceColumn": "beginning_account",
+            "summarizeBy": "none",
+            "lineageTag": "04c88e36-ad8b-5841-8f20-d443d8e52396"
+          },
+          {
+            "name": "churned_account",
+            "dataType": "int64",
+            "sourceColumn": "churned_account",
+            "summarizeBy": "none",
+            "lineageTag": "402a5228-6556-556d-87e1-794ef98adfb2"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Revenue",
+            "mode": "import",
+            "source": {
+              "type": "m",
+              "expression": "let\n Source = LoadMart(\"fct_account_month\"),\n EmptyAsNull = Table.ReplaceValue(Source, \"\", null, Replacer.ReplaceValue, Table.ColumnNames(Source)),\n Typed = Table.TransformColumnTypes(EmptyAsNull, {{\"account_id\", type text}, {\"month\", type date}, {\"mrr\", Currency.Type}, {\"beginning_mrr\", Currency.Type}, {\"new_mrr\", Currency.Type}, {\"reactivation_mrr\", Currency.Type}, {\"expansion_mrr\", Currency.Type}, {\"contraction_mrr\", Currency.Type}, {\"churn_mrr\", Currency.Type}, {\"paying_account\", Int64.Type}, {\"beginning_account\", Int64.Type}, {\"churned_account\", Int64.Type}}, \"en-US\")\nin Typed"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Events",
+        "lineageTag": "bd7f9582-d7e1-5f33-920e-903d3639a2fc",
+        "columns": [
+          {
+            "name": "event_id",
+            "dataType": "string",
+            "sourceColumn": "event_id",
+            "summarizeBy": "none",
+            "lineageTag": "1d506697-f3f5-5a83-83c9-9f4f02dafc32",
+            "isHidden": true
+          },
+          {
+            "name": "user_id",
+            "dataType": "string",
+            "sourceColumn": "user_id",
+            "summarizeBy": "none",
+            "lineageTag": "d7b1e49b-8539-56d9-9692-fd113abfa379",
+            "isHidden": true
+          },
+          {
+            "name": "account_id",
+            "dataType": "string",
+            "sourceColumn": "account_id",
+            "summarizeBy": "none",
+            "lineageTag": "ac81c871-1456-53da-9563-fe3cd63f8990",
+            "isHidden": true
+          },
+          {
+            "name": "date_day",
+            "dataType": "dateTime",
+            "sourceColumn": "date_day",
+            "summarizeBy": "none",
+            "lineageTag": "a8fd0eda-ba43-59ab-894c-c2833b726c3f",
+            "formatString": "yyyy-MM-dd"
+          },
+          {
+            "name": "month",
+            "dataType": "dateTime",
+            "sourceColumn": "month",
+            "summarizeBy": "none",
+            "lineageTag": "2970ac4a-54a6-5a81-b587-aace64399ea1",
+            "formatString": "yyyy-MM-dd"
+          },
+          {
+            "name": "occurred_at",
+            "dataType": "dateTime",
+            "sourceColumn": "occurred_at",
+            "summarizeBy": "none",
+            "lineageTag": "177dce3f-1b52-52f2-8211-05d43facf87a",
+            "formatString": "yyyy-MM-dd"
+          },
+          {
+            "name": "event_name",
+            "dataType": "string",
+            "sourceColumn": "event_name",
+            "summarizeBy": "none",
+            "lineageTag": "fec4298c-67d7-58ea-b423-4f266dc71fd4"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Events",
+            "mode": "import",
+            "source": {
+              "type": "m",
+              "expression": "let\n Source = LoadMart(\"fct_product_event\"),\n EmptyAsNull = Table.ReplaceValue(Source, \"\", null, Replacer.ReplaceValue, Table.ColumnNames(Source)),\n Typed = Table.TransformColumnTypes(EmptyAsNull, {{\"event_id\", type text}, {\"user_id\", type text}, {\"account_id\", type text}, {\"date_day\", type date}, {\"month\", type date}, {\"occurred_at\", type datetime}, {\"event_name\", type text}}, \"en-US\"),\n Filtered = Table.SelectRows(Typed, each [occurred_at] >= RangeStart and [occurred_at] < RangeEnd)\nin Filtered"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Funnel",
+        "lineageTag": "b9c92e34-2b20-5271-bfe1-e0b8e1c0257f",
+        "columns": [
+          {
+            "name": "account_id",
+            "dataType": "string",
+            "sourceColumn": "account_id",
+            "summarizeBy": "none",
+            "lineageTag": "4c43a1b5-b059-55b8-b1a4-465240fdccb7",
+            "isHidden": true
+          },
+          {
+            "name": "signup_date",
+            "dataType": "dateTime",
+            "sourceColumn": "signup_date",
+            "summarizeBy": "none",
+            "lineageTag": "1ba50a87-abb4-5462-b4b2-9ece2681d226",
+            "formatString": "yyyy-MM-dd"
+          },
+          {
+            "name": "trial_date",
+            "dataType": "dateTime",
+            "sourceColumn": "trial_date",
+            "summarizeBy": "none",
+            "lineageTag": "70977985-d532-5f14-8712-8c26f71dc69c",
+            "formatString": "yyyy-MM-dd"
+          },
+          {
+            "name": "qualified_date",
+            "dataType": "dateTime",
+            "sourceColumn": "qualified_date",
+            "summarizeBy": "none",
+            "lineageTag": "6cb14e4a-dfaf-58f8-b97d-386851ff5ee5",
+            "formatString": "yyyy-MM-dd"
+          },
+          {
+            "name": "paid_date",
+            "dataType": "dateTime",
+            "sourceColumn": "paid_date",
+            "summarizeBy": "none",
+            "lineageTag": "d51d1b43-17b6-536c-aafa-9b3feec524c4",
+            "formatString": "yyyy-MM-dd"
+          },
+          {
+            "name": "activation_date",
+            "dataType": "dateTime",
+            "sourceColumn": "activation_date",
+            "summarizeBy": "none",
+            "lineageTag": "29ef7cd3-d8a7-5320-975c-fa7617a092da",
+            "formatString": "yyyy-MM-dd"
+          },
+          {
+            "name": "activation_eligible",
+            "dataType": "int64",
+            "sourceColumn": "activation_eligible",
+            "summarizeBy": "none",
+            "lineageTag": "98b9fd0d-6354-5853-9f99-a21b42ab5d82"
+          },
+          {
+            "name": "activated",
+            "dataType": "int64",
+            "sourceColumn": "activated",
+            "summarizeBy": "none",
+            "lineageTag": "96cc5055-2a0f-54d3-b89c-640be3ffa542"
+          },
+          {
+            "name": "qualified",
+            "dataType": "int64",
+            "sourceColumn": "qualified",
+            "summarizeBy": "none",
+            "lineageTag": "3506d0ba-4bef-5f40-9ea9-c9d3d5286a22"
+          },
+          {
+            "name": "converted",
+            "dataType": "int64",
+            "sourceColumn": "converted",
+            "summarizeBy": "none",
+            "lineageTag": "fe5a9638-d84a-5ea4-a53f-15575ba621cb"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Funnel",
+            "mode": "import",
+            "source": {
+              "type": "m",
+              "expression": "let\n Source = LoadMart(\"fct_account_funnel\"),\n EmptyAsNull = Table.ReplaceValue(Source, \"\", null, Replacer.ReplaceValue, Table.ColumnNames(Source)),\n Typed = Table.TransformColumnTypes(EmptyAsNull, {{\"account_id\", type text}, {\"signup_date\", type date}, {\"trial_date\", type date}, {\"qualified_date\", type date}, {\"paid_date\", type date}, {\"activation_date\", type date}, {\"activation_eligible\", Int64.Type}, {\"activated\", Int64.Type}, {\"qualified\", Int64.Type}, {\"converted\", Int64.Type}}, \"en-US\")\nin Typed"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Marketing",
+        "lineageTag": "3132dbee-34f8-509c-b52e-6425c1a2fb50",
+        "columns": [
+          {
+            "name": "date_day",
+            "dataType": "dateTime",
+            "sourceColumn": "date_day",
+            "summarizeBy": "none",
+            "lineageTag": "4df16f45-56c3-53d2-8b26-cdf2d32acc85",
+            "formatString": "yyyy-MM-dd"
+          },
+          {
+            "name": "channel",
+            "dataType": "string",
+            "sourceColumn": "channel",
+            "summarizeBy": "none",
+            "lineageTag": "b4cc400e-e483-564a-b854-c39d43ac67f5"
+          },
+          {
+            "name": "spend",
+            "dataType": "double",
+            "sourceColumn": "spend",
+            "summarizeBy": "none",
+            "lineageTag": "9b1f589e-a409-55aa-84bc-ffe5964aa9af"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Marketing",
+            "mode": "import",
+            "source": {
+              "type": "m",
+              "expression": "let\n Source = LoadMart(\"fct_marketing_spend\"),\n EmptyAsNull = Table.ReplaceValue(Source, \"\", null, Replacer.ReplaceValue, Table.ColumnNames(Source)),\n Typed = Table.TransformColumnTypes(EmptyAsNull, {{\"date_day\", type date}, {\"channel\", type text}, {\"spend\", type number}}, \"en-US\")\nin Typed"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Metrics",
+        "lineageTag": "0dede94a-3b68-5ad3-82f7-c8037d75cd2c",
+        "columns": [
+          {
+            "name": "Value",
+            "dataType": "int64",
+            "sourceColumn": "Value",
+            "isHidden": true
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Metrics",
+            "mode": "import",
+            "source": {
+              "type": "m",
+              "expression": "#table(type table [Value=Int64.Type], {{1}})"
+            }
+          }
+        ],
+        "measures": [
+          {
+            "name": "MRR",
+            "expression": "VAR Period = MAX(Revenue[month]) RETURN CALCULATE(SUM(Revenue[mrr]), KEEPFILTERS(Revenue[month] = Period))",
+            "formatString": "$#,0;($#,0);$0",
+            "displayFolder": "Revenue",
+            "lineageTag": "646031e1-eace-5cce-bee9-3f0fbc0368fa"
+          },
+          {
+            "name": "Beginning MRR",
+            "expression": "VAR Period = MAX(Revenue[month]) RETURN CALCULATE(SUM(Revenue[beginning_mrr]), KEEPFILTERS(Revenue[month] = Period))",
+            "formatString": "$#,0;($#,0);$0",
+            "displayFolder": "Revenue",
+            "lineageTag": "f207f287-5e4b-507e-83e4-e478769ecf12"
+          },
+          {
+            "name": "New MRR",
+            "expression": "VAR Period = MAX(Revenue[month]) RETURN CALCULATE(SUM(Revenue[new_mrr]), KEEPFILTERS(Revenue[month] = Period))",
+            "formatString": "$#,0;($#,0);$0",
+            "displayFolder": "Revenue",
+            "lineageTag": "ee4753b5-cc2b-57d6-b63e-5a75e95bfe87"
+          },
+          {
+            "name": "Reactivation MRR",
+            "expression": "VAR Period = MAX(Revenue[month]) RETURN CALCULATE(SUM(Revenue[reactivation_mrr]), KEEPFILTERS(Revenue[month] = Period))",
+            "formatString": "$#,0;($#,0);$0",
+            "displayFolder": "Revenue",
+            "lineageTag": "45a94350-5258-5983-a8fe-907b05b470a3"
+          },
+          {
+            "name": "Expansion MRR",
+            "expression": "VAR Period = MAX(Revenue[month]) RETURN CALCULATE(SUM(Revenue[expansion_mrr]), KEEPFILTERS(Revenue[month] = Period))",
+            "formatString": "$#,0;($#,0);$0",
+            "displayFolder": "Revenue",
+            "lineageTag": "d47cd1ca-7bd1-58f9-b635-e23abdba9ae7"
+          },
+          {
+            "name": "Contraction MRR",
+            "expression": "VAR Period = MAX(Revenue[month]) RETURN CALCULATE(SUM(Revenue[contraction_mrr]), KEEPFILTERS(Revenue[month] = Period))",
+            "formatString": "$#,0;($#,0);$0",
+            "displayFolder": "Revenue",
+            "lineageTag": "93364138-2d24-54b0-ad6d-ffda48cf9635"
+          },
+          {
+            "name": "Churn MRR",
+            "expression": "VAR Period = MAX(Revenue[month]) RETURN CALCULATE(SUM(Revenue[churn_mrr]), KEEPFILTERS(Revenue[month] = Period))",
+            "formatString": "$#,0;($#,0);$0",
+            "displayFolder": "Revenue",
+            "lineageTag": "96b8eb77-bc93-5bfe-9c5b-baa644db6b0c"
+          },
+          {
+            "name": "Paying accounts",
+            "expression": "VAR Period = MAX(Revenue[month]) RETURN CALCULATE(SUM(Revenue[paying_account]), KEEPFILTERS(Revenue[month] = Period))",
+            "formatString": "#,0",
+            "displayFolder": "Revenue",
+            "lineageTag": "1ff6b5ec-d0ee-5bc4-84a3-c8f996e1041f"
+          },
+          {
+            "name": "Beginning accounts",
+            "expression": "VAR Period = MAX(Revenue[month]) RETURN CALCULATE(SUM(Revenue[beginning_account]), KEEPFILTERS(Revenue[month] = Period))",
+            "formatString": "#,0",
+            "displayFolder": "Revenue",
+            "lineageTag": "2ed0b6ed-4434-5627-b1a9-f4c88f234a3f"
+          },
+          {
+            "name": "Churned accounts",
+            "expression": "VAR Period = MAX(Revenue[month]) RETURN CALCULATE(SUM(Revenue[churned_account]), KEEPFILTERS(Revenue[month] = Period))",
+            "formatString": "#,0",
+            "displayFolder": "Revenue",
+            "lineageTag": "d225cfd7-bd92-5542-9af6-08a2a1001ac4"
+          },
+          {
+            "name": "ARR",
+            "expression": "[MRR] * 12",
+            "formatString": "$#,0",
+            "displayFolder": "Revenue",
+            "lineageTag": "1e2ccab5-24bd-503d-90b1-70748592b56a"
+          },
+          {
+            "name": "NRR",
+            "expression": "DIVIDE([Beginning MRR] + [Expansion MRR] - [Contraction MRR] - [Churn MRR], [Beginning MRR])",
+            "formatString": "0.0%",
+            "displayFolder": "Revenue",
+            "lineageTag": "87c9b473-3180-5a9f-9c07-6a1588f62604"
+          },
+          {
+            "name": "GRR",
+            "expression": "DIVIDE([Beginning MRR] - [Contraction MRR] - [Churn MRR], [Beginning MRR])",
+            "formatString": "0.0%",
+            "displayFolder": "Revenue",
+            "lineageTag": "5328df88-3c3a-52cd-ba90-4589075c4dd8"
+          },
+          {
+            "name": "Logo churn",
+            "expression": "DIVIDE([Churned accounts], [Beginning accounts])",
+            "formatString": "0.0%",
+            "displayFolder": "Revenue",
+            "lineageTag": "3ecd3d88-2b67-5aeb-b651-cb107d30e1fc"
+          },
+          {
+            "name": "ARPA",
+            "expression": "DIVIDE([MRR], [Paying accounts])",
+            "formatString": "$#,0",
+            "displayFolder": "Revenue",
+            "lineageTag": "0c0bb5f0-d883-5d6a-ad4d-afa47ffbae04"
+          },
+          {
+            "name": "Modeled LTV",
+            "expression": "VAR Period = MAX(Revenue[month])\nVAR WindowDates = DATESBETWEEN('Date'[date_day], EDATE(Period, -2), EOMONTH(Period, 0))\nVAR Churned = CALCULATE(SUM(Revenue[churned_account]), REMOVEFILTERS('Date'), WindowDates)\nVAR Starting = CALCULATE(SUM(Revenue[beginning_account]), REMOVEFILTERS('Date'), WindowDates)\nRETURN DIVIDE([ARPA] * 0.8, DIVIDE(Churned, Starting))",
+            "formatString": "$#,0",
+            "displayFolder": "Revenue",
+            "lineageTag": "ab11867e-1c15-52ff-9e3c-c36d3596f990"
+          },
+          {
+            "name": "MRR reconciliation",
+            "expression": "[MRR] - ([Beginning MRR] + [New MRR] + [Reactivation MRR] + [Expansion MRR] - [Contraction MRR] - [Churn MRR])",
+            "formatString": "$#,0.00",
+            "displayFolder": "Revenue",
+            "lineageTag": "137c3bde-8dda-51df-b231-ae7678a2acf4"
+          },
+          {
+            "name": "Active users",
+            "expression": "DISTINCTCOUNT(Events[user_id])",
+            "formatString": "#,0",
+            "displayFolder": "Product",
+            "lineageTag": "3a9009a3-71b6-5b7a-8498-b8fd25f9e73f"
+          },
+          {
+            "name": "MAU",
+            "expression": "VAR LastDate = MAX('Date'[date_day])\nRETURN CALCULATE([Active users], REMOVEFILTERS('Date'), DATESBETWEEN('Date'[date_day], DATE(YEAR(LastDate), MONTH(LastDate), 1), EOMONTH(LastDate, 0)))",
+            "formatString": "#,0",
+            "displayFolder": "Product",
+            "lineageTag": "9cf6c6fe-bc41-5379-95e4-81a5b4f9f0f1"
+          },
+          {
+            "name": "Average DAU",
+            "expression": "VAR LastDate = MAX('Date'[date_day])\nVAR DaysInMonth = CALCULATETABLE(VALUES('Date'[date_day]), REMOVEFILTERS('Date'), DATESBETWEEN('Date'[date_day], DATE(YEAR(LastDate),MONTH(LastDate),1), EOMONTH(LastDate,0)))\nRETURN AVERAGEX(DaysInMonth, COALESCE(CALCULATE([Active users]),0))",
+            "formatString": "#,0.0",
+            "displayFolder": "Product",
+            "lineageTag": "4686354e-4978-55f4-a97b-3a6c93e30cda"
+          },
+          {
+            "name": "Stickiness",
+            "expression": "DIVIDE([Average DAU],[MAU])",
+            "formatString": "0.0%",
+            "displayFolder": "Product",
+            "lineageTag": "ff743e3f-13b1-5c85-b510-a3397240bbe6"
+          },
+          {
+            "name": "Feature adoption",
+            "expression": "DIVIDE([MAU], CALCULATE([MAU], REMOVEFILTERS(Events[event_name])))",
+            "formatString": "0.0%",
+            "displayFolder": "Product",
+            "lineageTag": "92709581-a6fe-594c-978f-cfe03aaac925"
+          },
+          {
+            "name": "Signup accounts",
+            "expression": "COUNTROWS(Funnel)",
+            "formatString": "#,0",
+            "displayFolder": "Acquisition",
+            "lineageTag": "7ba49140-2db8-555d-9a95-76007f63a300"
+          },
+          {
+            "name": "Qualified accounts",
+            "expression": "SUM(Funnel[qualified])",
+            "formatString": "#,0",
+            "displayFolder": "Acquisition",
+            "lineageTag": "0b619538-7a88-5984-80d7-8ef0513e0626"
+          },
+          {
+            "name": "Converted accounts",
+            "expression": "SUM(Funnel[converted])",
+            "formatString": "#,0",
+            "displayFolder": "Acquisition",
+            "lineageTag": "21e61b96-b2bd-502e-8c71-c1c9911531f5"
+          },
+          {
+            "name": "Conversion rate",
+            "expression": "DIVIDE([Converted accounts], [Signup accounts])",
+            "formatString": "0.0%",
+            "displayFolder": "Acquisition",
+            "lineageTag": "01c73b4b-6f40-5b4b-aaff-50b60bf10b24"
+          },
+          {
+            "name": "Activation rate",
+            "expression": "DIVIDE(CALCULATE(SUM(Funnel[activated]), Funnel[activation_eligible]=1), SUM(Funnel[activation_eligible]))",
+            "formatString": "0.0%",
+            "displayFolder": "Acquisition",
+            "lineageTag": "1130a9a7-9e81-5ac4-b3ca-e0967f8b292b"
+          },
+          {
+            "name": "Marketing spend",
+            "expression": "CALCULATE(SUM(Marketing[spend]), TREATAS(VALUES(Account[channel]), Marketing[channel]))",
+            "formatString": "$#,0",
+            "displayFolder": "Acquisition",
+            "lineageTag": "41917845-2bd0-5295-abc4-b5cc02bc0dfa"
+          },
+          {
+            "name": "Cohort acquisition cost",
+            "expression": "DIVIDE([Marketing spend],[Converted accounts])",
+            "formatString": "$#,0",
+            "displayFolder": "Acquisition",
+            "lineageTag": "a4e11a4a-4a91-5e75-803d-ca2de94bdee7"
+          },
+          {
+            "name": "Retained accounts",
+            "expression": "DISTINCTCOUNT(Events[account_id])",
+            "formatString": "#,0",
+            "displayFolder": "Retention",
+            "lineageTag": "b3ef4434-b8ab-502f-9d76-4df0fb518f3a"
+          },
+          {
+            "name": "Cohort accounts",
+            "expression": "COUNTROWS(Account)",
+            "formatString": "#,0",
+            "displayFolder": "Retention",
+            "lineageTag": "2652c8a7-7988-53e7-aee5-38647bd0b3fd"
+          },
+          {
+            "name": "Cohort retention",
+            "expression": "DIVIDE([Retained accounts],[Cohort accounts])",
+            "formatString": "0.0%",
+            "displayFolder": "Retention",
+            "lineageTag": "a5a35c0a-3923-50b1-9bd9-75666b787b61"
+          },
+          {
+            "name": "Account context",
+            "expression": "SELECTEDVALUE(Account[account_id], \"Multiple accounts\")",
+            "formatString": "",
+            "displayFolder": "Tooltips",
+            "lineageTag": "84e8b48a-bcdf-5bdc-9c98-88c571d61282"
+          },
+          {
+            "name": "Revenue context",
+            "expression": "\"MRR \" & FORMAT([MRR], \"$#,0\") & \" | NRR \" & FORMAT([NRR], \"0.0%\")",
+            "formatString": "",
+            "displayFolder": "Tooltips",
+            "lineageTag": "077bce79-65c1-54f2-b459-04632475b49d"
+          }
+        ]
+      },
+      {
+        "name": "UserRegion",
+        "isHidden": true,
+        "columns": [
+          {
+            "name": "upn",
+            "dataType": "string",
+            "sourceColumn": "upn"
+          },
+          {
+            "name": "region",
+            "dataType": "string",
+            "sourceColumn": "region"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "UserRegion",
+            "mode": "import",
+            "source": {
+              "type": "m",
+              "expression": "#table(type table [upn=text, region=text], {{\"amer.analyst@example.com\",\"AMER\"},{\"emea.analyst@example.com\",\"EMEA\"},{\"apac.analyst@example.com\",\"APAC\"}})"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Period comparison",
+        "columns": [
+          {
+            "name": "Period",
+            "dataType": "string",
+            "sourceColumn": "Name"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Period comparison",
+            "mode": "import",
+            "source": {
+              "type": "calculationGroup"
+            }
+          }
+        ],
+        "calculationGroup": {
+          "precedence": 10,
+          "calculationItems": [
+            {
+              "name": "Current",
+              "expression": "SELECTEDMEASURE()",
+              "ordinal": 0
+            },
+            {
+              "name": "Previous month",
+              "expression": "CALCULATE(SELECTEDMEASURE(), DATEADD('Date'[date_day], -1, MONTH))",
+              "ordinal": 1
+            },
+            {
+              "name": "MoM change %",
+              "expression": "VAR Prior = CALCULATE(SELECTEDMEASURE(), DATEADD('Date'[date_day], -1, MONTH)) RETURN DIVIDE(SELECTEDMEASURE() - Prior, Prior)",
+              "ordinal": 2,
+              "formatStringDefinition": {
+                "expression": "\"0.0%;-0.0%;0.0%\""
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "Metric selector",
+        "columns": [
+          {
+            "type": "calculatedTableColumn",
+            "name": "Metric",
+            "dataType": "string",
+            "sourceColumn": "[Value1]",
+            "sortByColumn": "Order",
+            "groupByColumns": [
+              {
+                "groupingColumn": "Fields"
+              }
+            ]
+          },
+          {
+            "type": "calculatedTableColumn",
+            "name": "Fields",
+            "dataType": "string",
+            "sourceColumn": "[Value2]",
+            "isHidden": true,
+            "sortByColumn": "Order",
+            "extendedProperties": [
+              {
+                "type": "json",
+                "name": "ParameterMetadata",
+                "value": {
+                  "version": 3,
+                  "kind": 2
+                }
+              }
+            ]
+          },
+          {
+            "type": "calculatedTableColumn",
+            "name": "Order",
+            "dataType": "int64",
+            "sourceColumn": "[Value3]",
+            "isHidden": true
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Metric selector",
+            "mode": "import",
+            "source": {
+              "type": "calculated",
+              "expression": "{(\"MRR\", NAMEOF(Metrics[MRR]), 0), (\"ARR\", NAMEOF(Metrics[ARR]), 1), (\"NRR\", NAMEOF(Metrics[NRR]), 2), (\"MAU\", NAMEOF(Metrics[MAU]), 3)}"
+            }
+          }
+        ]
+      }
+    ],
+    "relationships": [
+      {
+        "name": "4ab26b13-89de-505e-b25b-a1c2fbd7c608",
+        "fromTable": "Revenue",
+        "fromColumn": "account_id",
+        "toTable": "Account",
+        "toColumn": "account_id",
+        "crossFilteringBehavior": "oneDirection"
+      },
+      {
+        "name": "3cca4eba-ced6-5f1a-bb08-fd16577a5622",
+        "fromTable": "Events",
+        "fromColumn": "account_id",
+        "toTable": "Account",
+        "toColumn": "account_id",
+        "crossFilteringBehavior": "oneDirection"
+      },
+      {
+        "name": "96df207d-2a37-5e9f-90d4-35ae7060e4f1",
+        "fromTable": "Funnel",
+        "fromColumn": "account_id",
+        "toTable": "Account",
+        "toColumn": "account_id",
+        "crossFilteringBehavior": "oneDirection"
+      },
+      {
+        "name": "8f5b6088-5e4b-5ef6-a02d-0424f6124e70",
+        "fromTable": "Revenue",
+        "fromColumn": "month",
+        "toTable": "Date",
+        "toColumn": "date_day",
+        "crossFilteringBehavior": "oneDirection"
+      },
+      {
+        "name": "9c795046-7e69-57bd-bea0-c1f31c269aaa",
+        "fromTable": "Events",
+        "fromColumn": "date_day",
+        "toTable": "Date",
+        "toColumn": "date_day",
+        "crossFilteringBehavior": "oneDirection"
+      },
+      {
+        "name": "b0615080-3a0e-53c0-b516-8f7098aac3c3",
+        "fromTable": "Funnel",
+        "fromColumn": "signup_date",
+        "toTable": "Date",
+        "toColumn": "date_day",
+        "crossFilteringBehavior": "oneDirection"
+      },
+      {
+        "name": "d8b8ca4a-1ce0-540e-8a59-3f08e8c2c496",
+        "fromTable": "Marketing",
+        "fromColumn": "date_day",
+        "toTable": "Date",
+        "toColumn": "date_day",
+        "crossFilteringBehavior": "oneDirection"
+      }
+    ],
+    "expressions": [
+      {
+        "name": "DataFolder",
+        "kind": "m",
+        "expression": "\"C:\\saas-intelligence\\artifacts\" meta [IsParameterQuery=true, Type=\"Text\", IsParameterQueryRequired=true]"
+      },
+      {
+        "name": "UseSnowflake",
+        "kind": "m",
+        "expression": "false meta [IsParameterQuery=true, Type=\"Logical\", IsParameterQueryRequired=true]"
+      },
+      {
+        "name": "SnowflakeServer",
+        "kind": "m",
+        "expression": "\"YOUR_ACCOUNT.snowflakecomputing.com\" meta [IsParameterQuery=true, Type=\"Text\", IsParameterQueryRequired=true]"
+      },
+      {
+        "name": "SnowflakeWarehouse",
+        "kind": "m",
+        "expression": "\"SAAS_ETL_WH\" meta [IsParameterQuery=true, Type=\"Text\", IsParameterQueryRequired=true]"
+      },
+      {
+        "name": "SnowflakeDatabase",
+        "kind": "m",
+        "expression": "\"SAAS_ANALYTICS\" meta [IsParameterQuery=true, Type=\"Text\", IsParameterQueryRequired=true]"
+      },
+      {
+        "name": "RangeStart",
+        "kind": "m",
+        "expression": "#datetime(2024, 1, 1, 0, 0, 0) meta [IsParameterQuery=true, Type=\"DateTime\", IsParameterQueryRequired=true]"
+      },
+      {
+        "name": "RangeEnd",
+        "kind": "m",
+        "expression": "#datetime(2025, 7, 1, 0, 0, 0) meta [IsParameterQuery=true, Type=\"DateTime\", IsParameterQueryRequired=true]"
+      },
+      {
+        "name": "LoadMart",
+        "kind": "m",
+        "expression": "(tableName as text) as table =>\nlet\n    Source = if UseSnowflake then\n        let\n            Connection = Snowflake.Databases(SnowflakeServer, SnowflakeWarehouse, [Implementation=\"2.0\", Role=\"SAAS_BI_READER\"]),\n            Database = Connection{[Name=SnowflakeDatabase, Kind=\"Database\"]}[Data],\n            Schema = Database{[Name=\"ANALYTICS\", Kind=\"Schema\"]}[Data],\n            WarehouseTable = Schema{[Name=Text.Upper(tableName), Kind=\"Table\"]}[Data]\n        in Table.TransformColumnNames(WarehouseTable, Text.Lower)\n    else Table.PromoteHeaders(Csv.Document(File.Contents(DataFolder & \"/\" & tableName & \".csv\"),\n         [Delimiter=\",\", Encoding=65001, QuoteStyle=QuoteStyle.Csv]), [PromoteAllScalars=true])\nin Source"
+      }
+    ],
+    "roles": [
+      {
+        "name": "Regional Analyst",
+        "modelPermission": "read",
+        "tablePermissions": [
+          {
+            "name": "Account",
+            "filterExpression": "CONTAINS(FILTER(UserRegion, UserRegion[upn] = USERPRINCIPALNAME()), UserRegion[region], Account[region])"
+          },
+          {
+            "name": "UserRegion",
+            "filterExpression": "UserRegion[upn] = USERPRINCIPALNAME()"
+          },
+          {
+            "name": "Marketing",
+            "filterExpression": "FALSE()"
+          }
+        ]
+      }
+    ]
+  }
+}

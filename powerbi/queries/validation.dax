@@ -1,0 +1,4 @@
+// Run in Power BI DAX query view after Refresh. Reconciliation must be 0 for every month.
+EVALUATE
+SUMMARIZECOLUMNS('Date'[month], "MRR", [MRR], "ARR", [ARR], "NRR", [NRR], "GRR", [GRR], "Bridge residual", [MRR reconciliation])
+ORDER BY 'Date'[month]

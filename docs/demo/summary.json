@@ -1,0 +1,32 @@
+{
+  "dataset": "synthetic",
+  "latest_month": "2025-06-01",
+  "accounts": 120,
+  "events": 70090,
+  "latest_revenue": {
+    "month": "2025-06-01",
+    "mrr": 68004.25,
+    "beginning_mrr": 68002.75,
+    "new_mrr": 0.0,
+    "reactivation_mrr": 0.0,
+    "expansion_mrr": 199.5,
+    "contraction_mrr": 0.0,
+    "churn_mrr": 198.0,
+    "paying_accounts": 87,
+    "beginning_accounts": 89,
+    "churned_accounts": 2,
+    "arr": 816051.0,
+    "nrr": 1.0000220579314807,
+    "grr": 0.997088353044546,
+    "logo_churn_rate": 0.02247191011235955,
+    "arpa": 781.6580459770115,
+    "modeled_ltv": 40802.55
+  },
+  "latest_product": {
+    "month": "2025-06-01",
+    "average_dau": 111.3,
+    "mau": 379,
+    "active_accounts": 109,
+    "stickiness": 0.2936675461741425
+  }
+}

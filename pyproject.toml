@@ -1,0 +1,24 @@
+[project]
+name = "saas-intelligence"
+version = "0.1.0"
+description = "Tested SaaS revenue and product analytics from source events to Power BI"
+requires-python = ">=3.11,<3.14"
+dependencies = ["duckdb>=1.2,<2", "pyarrow>=18,<23", "pydantic>=2.10,<3", "dbt-duckdb>=1.9,<1.10"]
+[project.optional-dependencies]
+dev = ["pytest>=8,<9", "ruff>=0.11,<1", "jsonschema>=4,<5", "httpx>=0.28,<1", "pyyaml>=6,<7"]
+cloud = ["boto3>=1.35,<2", "snowflake-connector-python>=3.14,<5", "dbt-snowflake>=1.9,<1.10"]
+[project.scripts]
+saas = "saas_intelligence.cli:main"
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+[tool.setuptools.packages.find]
+where = ["src"]
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+[tool.ruff]
+line-length = 110
+[tool.ruff.lint]
+select = ["E", "F", "I", "B"]
+ignore = ["E501"]

@@ -1,0 +1,13 @@
+{
+  "name": "SaaS Intelligence",
+  "dataColors": [
+    "#18A886",
+    "#3977C4",
+    "#EBAD4A",
+    "#D86C79",
+    "#7E69B8"
+  ],
+  "background": "#F5F8FC",
+  "foreground": "#172D42",
+  "tableAccent": "#18A886"
+}

@@ -1,0 +1,12 @@
+{
+  "table": "Events",
+  "policy": {
+    "policyType": "basic",
+    "rollingWindowGranularity": "month",
+    "rollingWindowPeriods": 36,
+    "incrementalGranularity": "day",
+    "incrementalPeriods": 7,
+    "sourceExpression": "let\n Source = LoadMart(\"fct_product_event\"),\n Typed = Table.TransformColumnTypes(Source, {{\"event_id\", type text}, {\"user_id\", type text}, {\"account_id\", type text}, {\"date_day\", type date}, {\"month\", type date}, {\"occurred_at\", type datetime}, {\"event_name\", type text}}, \"en-US\"),\n Filtered = Table.SelectRows(Typed, each [occurred_at] >= RangeStart and [occurred_at] < RangeEnd)\nin Filtered"
+  },
+  "instructions": "Apply as table.refreshPolicy using TOM/XMLA after validating Snowflake query folding. Do not enable for the CSV demo. Refresh older partitions explicitly for events arriving later than seven days."
+}

@@ -1,0 +1,66 @@
+version: 2
+models:
+- name: dim_account
+  description: 'Account dimension: one row per account; synthetic region/segment/channel.'
+  columns:
+  - name: account_id
+    data_tests:
+    - unique
+    - not_null
+- name: dim_user
+  description: User dimension; one account per user.
+  columns:
+  - name: user_id
+    data_tests:
+    - unique
+    - not_null
+  - name: account_id
+    data_tests:
+    - not_null
+    - relationships:
+        to: ref('dim_account')
+        field: account_id
+- name: dim_date
+  description: Continuous daily calendar covering the observation period.
+  columns:
+  - name: date_day
+    data_tests:
+    - unique
+    - not_null
+- name: fct_product_event
+  description: One deduplicated product event; contains user and account foreign keys.
+  columns:
+  - name: event_id
+    data_tests:
+    - unique
+    - not_null
+  - name: account_id
+    data_tests:
+    - not_null
+    - relationships:
+        to: ref('dim_account')
+        field: account_id
+- name: fct_account_funnel
+  description: One account signup funnel with 7-day activation eligibility.
+  columns:
+  - name: account_id
+    data_tests:
+    - unique
+    - not_null
+    - relationships:
+        to: ref('dim_account')
+        field: account_id
+- name: fct_account_month
+  description: fct account month; grain and metric definitions in docs/metrics.md.
+- name: fct_marketing_spend
+  description: fct marketing spend; grain and metric definitions in docs/metrics.md.
+- name: mart_revenue_monthly
+  description: mart revenue monthly; grain and metric definitions in docs/metrics.md.
+- name: mart_product_monthly
+  description: mart product monthly; grain and metric definitions in docs/metrics.md.
+- name: mart_feature_adoption
+  description: mart feature adoption; grain and metric definitions in docs/metrics.md.
+- name: mart_cohort_retention
+  description: mart cohort retention; grain and metric definitions in docs/metrics.md.
+- name: mart_acquisition
+  description: mart acquisition; grain and metric definitions in docs/metrics.md.

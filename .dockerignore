@@ -1,0 +1,13 @@
+.git
+.venv
+.env
+*.pem
+*.p8
+data
+artifacts
+**/__pycache__
+**/*.egg-info
+**/target
+**/logs
+.pytest_cache
+.ruff_cache

@@ -1,0 +1,144 @@
+// Canonical definitions are also embedded in model.bim.
+
+// Revenue
+MRR =
+VAR Period = MAX(Revenue[month]) RETURN CALCULATE(SUM(Revenue[mrr]), KEEPFILTERS(Revenue[month] = Period))
+
+// Revenue
+Beginning MRR =
+VAR Period = MAX(Revenue[month]) RETURN CALCULATE(SUM(Revenue[beginning_mrr]), KEEPFILTERS(Revenue[month] = Period))
+
+// Revenue
+New MRR =
+VAR Period = MAX(Revenue[month]) RETURN CALCULATE(SUM(Revenue[new_mrr]), KEEPFILTERS(Revenue[month] = Period))
+
+// Revenue
+Reactivation MRR =
+VAR Period = MAX(Revenue[month]) RETURN CALCULATE(SUM(Revenue[reactivation_mrr]), KEEPFILTERS(Revenue[month] = Period))
+
+// Revenue
+Expansion MRR =
+VAR Period = MAX(Revenue[month]) RETURN CALCULATE(SUM(Revenue[expansion_mrr]), KEEPFILTERS(Revenue[month] = Period))
+
+// Revenue
+Contraction MRR =
+VAR Period = MAX(Revenue[month]) RETURN CALCULATE(SUM(Revenue[contraction_mrr]), KEEPFILTERS(Revenue[month] = Period))
+
+// Revenue
+Churn MRR =
+VAR Period = MAX(Revenue[month]) RETURN CALCULATE(SUM(Revenue[churn_mrr]), KEEPFILTERS(Revenue[month] = Period))
+
+// Revenue
+Paying accounts =
+VAR Period = MAX(Revenue[month]) RETURN CALCULATE(SUM(Revenue[paying_account]), KEEPFILTERS(Revenue[month] = Period))
+
+// Revenue
+Beginning accounts =
+VAR Period = MAX(Revenue[month]) RETURN CALCULATE(SUM(Revenue[beginning_account]), KEEPFILTERS(Revenue[month] = Period))
+
+// Revenue
+Churned accounts =
+VAR Period = MAX(Revenue[month]) RETURN CALCULATE(SUM(Revenue[churned_account]), KEEPFILTERS(Revenue[month] = Period))
+
+// Revenue
+ARR =
+[MRR] * 12
+
+// Revenue
+NRR =
+DIVIDE([Beginning MRR] + [Expansion MRR] - [Contraction MRR] - [Churn MRR], [Beginning MRR])
+
+// Revenue
+GRR =
+DIVIDE([Beginning MRR] - [Contraction MRR] - [Churn MRR], [Beginning MRR])
+
+// Revenue
+Logo churn =
+DIVIDE([Churned accounts], [Beginning accounts])
+
+// Revenue
+ARPA =
+DIVIDE([MRR], [Paying accounts])
+
+// Revenue
+Modeled LTV =
+VAR Period = MAX(Revenue[month])
+VAR WindowDates = DATESBETWEEN('Date'[date_day], EDATE(Period, -2), EOMONTH(Period, 0))
+VAR Churned = CALCULATE(SUM(Revenue[churned_account]), REMOVEFILTERS('Date'), WindowDates)
+VAR Starting = CALCULATE(SUM(Revenue[beginning_account]), REMOVEFILTERS('Date'), WindowDates)
+RETURN DIVIDE([ARPA] * 0.8, DIVIDE(Churned, Starting))
+
+// Revenue
+MRR reconciliation =
+[MRR] - ([Beginning MRR] + [New MRR] + [Reactivation MRR] + [Expansion MRR] - [Contraction MRR] - [Churn MRR])
+
+// Product
+Active users =
+DISTINCTCOUNT(Events[user_id])
+
+// Product
+MAU =
+VAR LastDate = MAX('Date'[date_day])
+RETURN CALCULATE([Active users], REMOVEFILTERS('Date'), DATESBETWEEN('Date'[date_day], DATE(YEAR(LastDate), MONTH(LastDate), 1), EOMONTH(LastDate, 0)))
+
+// Product
+Average DAU =
+VAR LastDate = MAX('Date'[date_day])
+VAR DaysInMonth = CALCULATETABLE(VALUES('Date'[date_day]), REMOVEFILTERS('Date'), DATESBETWEEN('Date'[date_day], DATE(YEAR(LastDate),MONTH(LastDate),1), EOMONTH(LastDate,0)))
+RETURN AVERAGEX(DaysInMonth, COALESCE(CALCULATE([Active users]),0))
+
+// Product
+Stickiness =
+DIVIDE([Average DAU],[MAU])
+
+// Product
+Feature adoption =
+DIVIDE([MAU], CALCULATE([MAU], REMOVEFILTERS(Events[event_name])))
+
+// Acquisition
+Signup accounts =
+COUNTROWS(Funnel)
+
+// Acquisition
+Qualified accounts =
+SUM(Funnel[qualified])
+
+// Acquisition
+Converted accounts =
+SUM(Funnel[converted])
+
+// Acquisition
+Conversion rate =
+DIVIDE([Converted accounts], [Signup accounts])
+
+// Acquisition
+Activation rate =
+DIVIDE(CALCULATE(SUM(Funnel[activated]), Funnel[activation_eligible]=1), SUM(Funnel[activation_eligible]))
+
+// Acquisition
+Marketing spend =
+CALCULATE(SUM(Marketing[spend]), TREATAS(VALUES(Account[channel]), Marketing[channel]))
+
+// Acquisition
+Cohort acquisition cost =
+DIVIDE([Marketing spend],[Converted accounts])
+
+// Retention
+Retained accounts =
+DISTINCTCOUNT(Events[account_id])
+
+// Retention
+Cohort accounts =
+COUNTROWS(Account)
+
+// Retention
+Cohort retention =
+DIVIDE([Retained accounts],[Cohort accounts])
+
+// Tooltips
+Account context =
+SELECTEDVALUE(Account[account_id], "Multiple accounts")
+
+// Tooltips
+Revenue context =
+"MRR " & FORMAT([MRR], "$#,0") & " | NRR " & FORMAT([NRR], "0.0%")

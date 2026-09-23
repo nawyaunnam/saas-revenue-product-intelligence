@@ -1,0 +1,18 @@
+name: saas_intelligence
+version: '1.0.0'
+config-version: 2
+profile: saas_intelligence
+model-paths: [models]
+test-paths: [tests]
+macro-paths: [macros]
+clean-targets: [target, dbt_packages]
+models:
+  saas_intelligence:
+    staging:
+      +materialized: view
+    intermediate:
+      +materialized: view
+    marts:
+      +materialized: table
+flags:
+  send_anonymous_usage_stats: false
