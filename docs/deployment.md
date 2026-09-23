@@ -15,6 +15,19 @@ python -m http.server 8081 --directory artifacts
 
 Open http://localhost:8081/dashboard.html. `saas generate`, `saas load`, `saas build`, and `saas export` also run independently. A completed manifest and latest_batch pointer are in `data/`. Regenerating identical inputs produces the same batch ID; changing `--accounts` or `--months` creates a new one. Do not run simultaneous writers against DuckDB.
 
+## Import exported data
+
+Create six JSON arrays named `accounts.json`, `users.json`, `subscriptions.json`, `events.json`, `opportunities.json` and `marketing.json`. Field names, accepted categories and types are defined in `src/saas_intelligence/contracts.py`. Use ISO dates and timestamps; offset timestamps normalize to UTC. Naive timestamps are treated as UTC. Currency is USD only. Include a complete billing account-month history and marketing calendar, with explicit zero subscription balances after cancellation.
+
+```bash
+saas ingest --source-dir /path/to/exports
+saas load
+saas build
+saas export
+```
+
+For Snowflake add `--target snowflake` to load/build. Imports validate all six datasets before landing, fail on foreign-key/chronology/type errors, and deduplicate events by latest ingestion time. Real exports remain gitignored under data/ and artifacts/; do not copy their generated previews into docs/demo/ or upload them publicly.
+
 ## Docker and Airflow
 
 ```bash

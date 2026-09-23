@@ -1,9 +1,9 @@
 """Typed source contracts. All money is integer USD cents; timestamps are UTC-naive."""
 
-from datetime import date, datetime
+from datetime import date, datetime, timezone
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
 class Record(BaseModel):
@@ -39,6 +39,12 @@ class Event(Record):
     occurred_at: datetime
     event_name: Literal["login", "workspace_created", "invite_sent", "report_created", "export", "automation"]
     ingested_at: datetime
+
+    @field_validator("occurred_at", "ingested_at")
+    @classmethod
+    def utc_timestamp(cls, value):
+        # Offset-aware feeds are normalized before storage; naive source values mean UTC.
+        return value.astimezone(timezone.utc).replace(tzinfo=None) if value.tzinfo else value
 
 
 class Opportunity(Record):

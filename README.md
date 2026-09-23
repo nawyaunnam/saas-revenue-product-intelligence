@@ -7,7 +7,7 @@
 
 An end-to-end analytics portfolio project that connects **revenue performance to product behavior**. Python validates billing, CRM, product and marketing data; Airflow orchestrates the pipeline; S3 and Snowflake provide the cloud path; dbt builds a tested star schema; Power BI provides the executive semantic model and report source.
 
-A credential-free DuckDB path executes the same dbt models locally and in CI. All included data is synthetic.
+A credential-free DuckDB path executes the same dbt models locally and in CI. All included data is synthetic. A `saas ingest --source-dir` command accepts six contracted JSON exports for your own data.
 
 ![Architecture](docs/architecture.svg)
 

@@ -757,11 +757,13 @@
             "dataType": "string",
             "sourceColumn": "[Value1]",
             "sortByColumn": "Order",
-            "groupByColumns": [
-              {
-                "groupingColumn": "Fields"
-              }
-            ]
+            "relatedColumnDetails": {
+              "groupByColumns": [
+                {
+                  "groupingColumn": "Fields"
+                }
+              ]
+            }
           },
           {
             "type": "calculatedTableColumn",

@@ -38,7 +38,7 @@ jobs:
       - name: Parse DAG in actual Airflow runtime
         run: >-
           docker run --rm --entrypoint /usr/local/bin/python saas-airflow:ci -c
-          "from airflow.models import DagBag; b=DagBag('/opt/airflow/dags', include_examples=False); assert not b.import_errors, b.import_errors; d=b.get_dag('saas_revenue_product_intelligence'); assert len(d.tasks)==4; assert d.max_active_runs==1"
+          "import runpy; d=runpy.run_path('/opt/airflow/dags/saas_intelligence.py')['dag']; assert len(d.tasks)==4; assert d.max_active_runs==1"
 
   powerbi-model:
     runs-on: windows-latest

@@ -63,3 +63,33 @@ def test_tampered_batch_rejected(data, tmp_path):
     with pytest.raises(ValueError, match="Checksum"):
         load_local(batch, tmp_path / "test.duckdb")
     assert not (tmp_path / "test.duckdb").exists()
+
+
+def test_json_import_uses_same_contracts(data, tmp_path, monkeypatch):
+    import json
+
+    from saas_intelligence.cli import main
+
+    source = tmp_path / "sources"
+    source.mkdir()
+    for name, rows in data.items():
+        (source / f"{name}.json").write_text(json.dumps(rows, default=str))
+    monkeypatch.setattr("sys.argv", ["saas", "ingest", "--root", str(tmp_path), "--source-dir", str(source)])
+    main()
+    batch = (tmp_path / "data/latest_batch.txt").read_text()
+    assert verify(batch)["files"]["accounts"]["rows"] == 12
+
+
+def test_timezone_normalization():
+    from saas_intelligence.contracts import Event
+
+    row = Event(
+        event_id="e",
+        user_id="u",
+        account_id="a",
+        event_name="login",
+        occurred_at="2024-01-02T00:30:00+02:00",
+        ingested_at="2024-01-02T02:00:00+02:00",
+    )
+    assert row.occurred_at.isoformat() == "2024-01-01T22:30:00"
+    assert row.ingested_at.tzinfo is None
