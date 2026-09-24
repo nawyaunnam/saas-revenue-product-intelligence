@@ -1,15 +1,20 @@
 # SaaS Revenue & Product Intelligence
 
 [![CI](https://github.com/nawyaunnam/saas-revenue-product-intelligence/actions/workflows/ci.yml/badge.svg)](https://github.com/nawyaunnam/saas-revenue-product-intelligence/actions/workflows/ci.yml)
-![Python](https://img.shields.io/badge/Python-3.11%E2%80%933.13-3776AB)
-![dbt](https://img.shields.io/badge/dbt-tested_marts-FF694B)
-![Power BI](https://img.shields.io/badge/Power_BI-PBIP_%2B_DAX-F2C811)
 
 An end-to-end analytics portfolio project that connects **revenue performance to product behavior**. Python validates billing, CRM, product and marketing data; Airflow orchestrates the pipeline; S3 and Snowflake provide the cloud path; dbt builds a tested star schema; Power BI provides the executive semantic model and report source.
 
 A credential-free DuckDB path executes the same dbt models locally and in CI. All included data is synthetic. A `saas ingest --source-dir` command accepts six contracted JSON exports for your own data.
 
 ![Architecture](docs/architecture.svg)
+
+## A result to inspect
+
+![Revenue, feature adoption, and cohort detail from the HTML preview](docs/demo/preview.png)
+
+Actual capture of the local HTML preview using the committed synthetic dataset; this is not a Power BI Desktop screenshot. The complete [HTML preview](docs/demo/dashboard.html) can be downloaded and opened locally.
+
+The central question is how revenue changes relate to customer retention and product use. In the [golden metric test](tests/test_metrics.py), opening MRR of 300, expansion of 50, churn of 200, and new MRR of 50 produce ending MRR of 200. NRR is 50% because new revenue does not belong in its numerator. The [SQL model](dbt/models/marts/mart_revenue_monthly.sql) and [metric definitions](docs/metrics.md) make those choices explicit.
 
 ## Run it
 
